@@ -1,22 +1,33 @@
+# Import libraries
 import pandas as pd
 from scipy.stats import bernoulli
 from sklearn.linear_model import Lasso
 
-# `nlp` class
+# Declare `nlp` class
 class nlp:
     """
     Initialize an NLP explanation using LIME.
 
     `x0` (str):
-        The point of interest at which the blackbox model is to be explained.
+        The text to be explained. This string will serve as the point of interest around which
+        the local explanation will be made.
     
     `blackbox`:
-        The model to be explained using LIME.
+        The black-box model to be explained using LIME.
         `blackbox` must be able to evaluate the expression `blackbox(x0)` and return a prediction.
+        The prediction must be bound between 0 and 1.
     """
+
+    # Initialize object
     def __init__(self, blackbox, x0:str):
+        
+        # Add self-text attribute
         nlp.x0 = x0
+
+        # Add words attribute
         nlp.words = x0.split(' ')
+
+        # Add black-box model as static method
         nlp.blackbox = staticmethod(blackbox)
 
     # Method to create multiple perturbations stemming from x0
